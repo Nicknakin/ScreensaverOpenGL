@@ -13,25 +13,29 @@ struct settings{
     const int speed;
 };
 
-int main(){
-    settings config = {1920/2, 1080/2, 10, 60};
-    bool resized = true;
-    Grid cells{config.width/config.sideLength, config.height/config.sideLength, config.sideLength};
-    sf::RenderWindow window(sf::VideoMode(config.width,config.height), "SFML Project");
-    window.setFramerateLimit(config.speed);
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
+int main(int argc, char** argv){
+    try{
+        settings config = {(argc >= 2)? std::stoi(argv[1]): 1920/2, (argc >= 3)? std::stoi(argv[2]): 1080/2, (argc >= 4)? std::stoi(argv[3]): 10, (argc >= 5)? std::stoi(argv[4]): 60};
+        bool resized = true;
+        Grid cells{config.width/config.sideLength, config.height/config.sideLength, config.sideLength};
+        sf::RenderWindow window(sf::VideoMode(config.width,config.height), "SFML Project");
+        window.setFramerateLimit(config.speed);
+        while (window.isOpen())
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
-            else if(event.type == sf::Event::Resized)
-                    resized = true;
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+                else if(event.type == sf::Event::Resized)
+                        resized = true;
+            }
+            
+            resized = false;
+            window.display();
         }
-        
-        resized = false;
-        window.display();
+    } catch(const std::exception& e){
+        return 1;
     }
     return 0;
 }
