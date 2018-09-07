@@ -6,6 +6,18 @@ Grid::Grid(int width, int height, int side, sf::Color defaultColor): width{width
     }
 }
 
+Cell& Grid::getChangedCell(int i){
+    return changedCells[i];
+}
+
+void Grid::popChangedCell(){
+    changedCells.erase(changedCells.begin(), changedCells.begin()+1);
+}
+
+int Grid::getChangedCellSize(){
+    return changedCells.size();
+}
+
 int Grid::size(){
     return height*width;
 }
@@ -19,10 +31,12 @@ int Grid::getWidth(){
 }
 
 Cell& Grid::getCell(int x, int y){
-    return getCell(x+y*width);
+    changedCells.push_back(cells[x+y*width]);
+    return cells[x+y*width];
 }
 
 Cell& Grid::getCell(int oneDIndex){
+    changedCells.push_back(cells[oneDIndex]);
     return cells[oneDIndex];
 }
 

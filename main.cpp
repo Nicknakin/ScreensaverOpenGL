@@ -53,7 +53,12 @@ int main(int argc, char** argv){
 
             update(config, ops, cells);
             
-            if(true){
+            while(cells.getChangedCellSize() > 0){
+                window.draw(cells.getChangedCell(0));
+                cells.popChangedCell();
+            }
+            
+            if(resized){
                 for(int i = 0; i < cells.size(); i++){
                     window.draw(cells.getCell(i));
                 }
@@ -69,19 +74,19 @@ int main(int argc, char** argv){
 }
 
 void update(setting config, operators& ops, Grid& cells){
-    while((ops.activeX >= 0 && ops.activeX <= ops.xLimit) && (ops.activeY >= 0 && ops.activeY <= ops.yLimit)){
-        Cell activeCell = cells.getCell(ops.activeX, ops.activeY);
+    while(ops.activeX != ops.xLimit && ops.activeY != ops.yLimit){
+        Cell& activeCell = cells.getCell(ops.activeX, ops.activeY);
         activeCell.setValue((activeCell.getValue() + 1) % ops.colors.size());
-        cells.setColor(ops.activeX, ops.activeY, ops.colors[activeCell.getValue()]);
+        activeCell.setFillColor(ops.colors[activeCell.getValue()]);
         ops.activeX += ops.xIncrement;
         ops.activeY += ops.yIncrement;
     }
-    if(ops.activeX <= 0 || ops.activeX >= ops.xLimit){
+    if(ops.activeX == ops.xLimit){
         ops.xIncrement *= -1;
-        ops.activeX += ops.xIncrement;
+        ops.xLimit = cells.getWidth() - ops.xLimit;
     }
     if(ops.activeY <= 0 || ops.activeY >= ops.yLimit){
         ops.yIncrement *= -1;
-        ops.activeY += ops.yIncrement;
+        ops.yLimit = cells.getHeight() - ops.yLimit;
     }
 }
