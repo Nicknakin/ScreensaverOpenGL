@@ -15,16 +15,15 @@ class Grid{
         int getWidth();
         int getHeight();
         sf::Color getDefaultColor();
-        std::vector<Cell>& getCells();
-        void setColor(int x, int y, int r, int g, int b);
         std::vector<Cell> operator[](int i);
-        
+        std::vector<Cell>& getCells();
+        void setColor(int x, int y, sf::Color color);
+        void setColor(int x, int y, int r, int g, int b);
 
     private:
         int width, height, side;
         const sf::Color defaultColor;
         std::vector<Cell> cells;
-        std::vector<Cell> changedCells;
 };
 
 #endif

@@ -2,12 +2,12 @@
 
 Grid::Grid(int width, int height, int side, sf::Color defaultColor): width{width}, height{height}, side{side}, defaultColor{defaultColor} {
     for(int i = 0; i < width*height; i++){
-        cells.push_back(Cell{i%width, i/width, side, side, defaultColor.r, defaultColor.g, defaultColor.b});
+        cells.push_back(Cell{i%width, i/width, side, side, (float) defaultColor.r, (float) defaultColor.g, (float) defaultColor.b});
     }
 }
 
 int Grid::size(){
-    return height;
+    return height*width;
 }
 
 int Grid::getHeight(){
@@ -36,6 +36,10 @@ std::vector<Cell>& Grid::getCells(){
 
 void Grid::setColor(int x, int y, int r, int g, int b){
     cells[x+width*y].setFillColor(sf::Color{r,g,b});
+}
+
+void Grid::setColor(int x, int y, sf::Color color){
+    cells[x+width*y].setFillColor(color);
 }
 
 std::vector<Cell> Grid::operator[](int i){
