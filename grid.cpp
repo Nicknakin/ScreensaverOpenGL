@@ -2,12 +2,12 @@
 
 Grid::Grid(int width, int height, int side, sf::Color defaultColor): width{width}, height{height}, side{side}, defaultColor{defaultColor} {
     for(int i = 0; i < width*height; i++){
-        cells.push_back(Cell{i%width, i/width, side, side, (float) defaultColor.r, (float) defaultColor.g, (float) defaultColor.b});
+        cells.push_back(Cell{i%width, i/width, side, side, (float) defaultColor.r, (float) defaultColor.g, (float) defaultColor.b, 1});
     }
 }
 
 Cell& Grid::getChangedCell(int i){
-    return changedCells[i];
+    return *changedCells[i];
 }
 
 void Grid::popChangedCell(){
@@ -31,12 +31,10 @@ int Grid::getWidth(){
 }
 
 Cell& Grid::getCell(int x, int y){
-    changedCells.push_back(cells[x+y*width]);
     return cells[x+y*width];
 }
 
 Cell& Grid::getCell(int oneDIndex){
-    changedCells.push_back(cells[oneDIndex]);
     return cells[oneDIndex];
 }
 
@@ -58,5 +56,9 @@ void Grid::setColor(int x, int y, sf::Color color){
 
 std::vector<Cell> Grid::operator[](int i){
     return std::vector<Cell>{cells.begin()+i*width, cells.begin()+(i+1)*width};
+}
+
+void Grid::change(int x, int y){
+    changedCells.push_back(&cells[x+y*width]);
 }
 

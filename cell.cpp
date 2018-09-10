@@ -50,4 +50,3 @@ void Cell::setColor(sf::Color color){
 void Cell::setColor(int r, int g, int b){
     setFillColor(sf::Color(r,g,b));
 }
-

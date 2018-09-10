@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 #include <ctime>
 
 #include <SFML/Graphics.hpp>
@@ -25,9 +26,9 @@ void update(setting config, operators& ops, Grid& cells);
 int main(int argc, char** argv){
     try{
         //Initialize settings, if there are enough arguments use each one for width height sideLengthand speed respectively.
-        setting config = {(argc >= 2)? std::stoi(argv[1]): 1920/2, (argc >= 3)? std::stoi(argv[2]): 1080/2, (argc >= 4)? std::stoi(argv[3]): 10, (argc >= 5)? std::stoi(argv[4]): 60};
+        setting config = {(argc >= 2)? std::stoi(argv[1]): 1920/2, (argc >= 3)? std::stoi(argv[2]): 1080/2, (argc >= 4)? std::stoi(argv[3]): 2, (argc >= 5)? std::stoi(argv[4]): 200};
  
-        operators ops = {0, 0, 1, 1, config.width/config.sideLength, config.height/config.sideLength};
+        operators ops = {0, 0, 1, 1, config.width/config.sideLength-1, config.height/config.sideLength-1};
 
         //Argument used to know whether the window has been resized.
         bool resized = true;
@@ -53,7 +54,7 @@ int main(int argc, char** argv){
 
             update(config, ops, cells);
             
-            while(cells.getChangedCellSize() > 0){
+            while(!resized && cells.getChangedCellSize() > 0){
                 window.draw(cells.getChangedCell(0));
                 cells.popChangedCell();
             }
@@ -75,6 +76,7 @@ int main(int argc, char** argv){
 
 void update(setting config, operators& ops, Grid& cells){
     while(ops.activeX != ops.xLimit && ops.activeY != ops.yLimit){
+        cells.change(ops.activeX, ops.activeY);
         Cell& activeCell = cells.getCell(ops.activeX, ops.activeY);
         activeCell.setValue((activeCell.getValue() + 1) % ops.colors.size());
         activeCell.setFillColor(ops.colors[activeCell.getValue()]);
@@ -83,10 +85,10 @@ void update(setting config, operators& ops, Grid& cells){
     }
     if(ops.activeX == ops.xLimit){
         ops.xIncrement *= -1;
-        ops.xLimit = cells.getWidth() - ops.xLimit;
+        ops.xLimit = cells.getWidth() - 1 - ops.xLimit;
     }
-    if(ops.activeY <= 0 || ops.activeY >= ops.yLimit){
+    if(ops.activeY == ops.yLimit){
         ops.yIncrement *= -1;
-        ops.yLimit = cells.getHeight() - ops.yLimit;
+        ops.yLimit = cells.getHeight() - 1 - ops.yLimit;
     }
 }
