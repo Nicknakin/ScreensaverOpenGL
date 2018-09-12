@@ -28,7 +28,7 @@ class Grid{
         int width, height, side;
         const sf::Color defaultColor;
         std::vector<Cell> cells;
-        std::vector<Cell*> changedCells;
+        std::vector<int> changedCells;
 };
 
 #endif

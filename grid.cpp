@@ -1,13 +1,14 @@
 #include "grid.h"
+#include <algorithm>
 
 Grid::Grid(int width, int height, int side, sf::Color defaultColor): width{width}, height{height}, side{side}, defaultColor{defaultColor} {
     for(int i = 0; i < width*height; i++){
-        cells.push_back(Cell{i%width, i/width, side, side, (float) defaultColor.r, (float) defaultColor.g, (float) defaultColor.b, 1});
+        cells.push_back(Cell{i%width, i/width, side, side, (float) defaultColor.r, (float) defaultColor.g, (float) defaultColor.b});
     }
 }
 
 Cell& Grid::getChangedCell(int i){
-    return *changedCells[i];
+    return cells[changedCells[i]];
 }
 
 void Grid::popChangedCell(){
@@ -59,6 +60,8 @@ std::vector<Cell> Grid::operator[](int i){
 }
 
 void Grid::change(int x, int y){
-    changedCells.push_back(&cells[x+y*width]);
+    if(!changedCells.empty() || !std::count(changedCells.begin(), changedCells.end(), x+y*width)){
+        changedCells.push_back(x+y*width);
+    }
 }
 

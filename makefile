@@ -16,5 +16,8 @@ cell: cell.cpp cell.h
 grid: grid.cpp grid.h
 	$(CXX) -c grid.cpp $(oglflags)
 
+run: default
+	./shapes.out
+
 clean:
 	rm -rf *.o *.out
